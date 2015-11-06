@@ -29,6 +29,7 @@ function sensors(){
 	$db = new SQLite3($location . "sensors.db");
 	$db->exec("create table if not exists sensors(date, core0, core1, core2, core3)");
 	$db->exec("insert into sensors values('${date}', ${core0}, ${core1}, ${core2}, ${core3})");
+	$db->close();
 }
 
 function memory(){
@@ -40,6 +41,7 @@ function memory(){
 	$db = new SQLite3($location . "memory.db");
 	$db->exec("create table if not exists memory(date, used, free, swap)");
 	$db->exec("insert into memory values('${date}', ${used}, ${free}, ${swap})");
+	$db->close();
 }
 
 function process(){
@@ -50,4 +52,5 @@ function process(){
 	$db = new SQLite3($location . "process.db");
 	$db->exec("create table if not exists process(date, process, zombie)");
 	$db->exec("insert into process values('${date}', ${process}, ${zombie})");
+	$db->close();
 }
