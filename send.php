@@ -60,7 +60,7 @@ function memory(){
 
 function process(){
 	$process = command("ps aux | wc -l")[0];
-	$zombie = command("top | head -2 | tail -1 | awk '{print $10}'")[0];
+	$zombie = command("ps -ef | grep [d]efunct | wc -l")[0];
 	
 	return array(
 			"process" => $process,
