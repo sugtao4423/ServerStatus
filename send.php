@@ -1,5 +1,8 @@
 <?php
-$url = "update.phpのURL";
+require_once './config.php';
+$user = getUser();
+$password = getPassword();
+$url = "https://${user}:${password}@sugtao4423.xyz/ServerStatus/update.php";
 $name = $argv[1];
 
 switch($name){
@@ -11,6 +14,7 @@ switch($name){
 				"process" => process()
 		);
 		break;
+
 	case micro:
 		$jsonArr = array(
 				"name" => $name,
@@ -18,6 +22,13 @@ switch($name){
 				"process" => process()
 		);
 		break;
+
+	case serverRoom:
+		$jsonArr = array(
+				"name" => $name,
+				"temp" => serverRoomTemp()
+		);
+
 	default:
 		die();
 }
@@ -50,7 +61,7 @@ function memory(){
 	$used = $memory[0];
 	$free = $memory[1];
 	$swap = $memory[2];
-	
+
 	return array(
 			"used" => $used,
 			"free" => $free,
@@ -61,11 +72,17 @@ function memory(){
 function process(){
 	$process = command("ps aux | wc -l")[0];
 	$zombie = command("ps -ef | grep [d]efunct | wc -l")[0];
-	
+
 	return array(
 			"process" => $process,
 			"zombie" => $zombie
 	);
+}
+
+function serverRoomTemp(){
+	$temp = command("sudo /home/tao/temper/temper | awk '{print $3}'");
+
+	return $temp;
 }
 
 function command($command){
