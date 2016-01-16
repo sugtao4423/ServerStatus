@@ -81,7 +81,7 @@ function process(){
 }
 
 function serverRoomTemp(){
-	$temp = command("sudo /home/tao/temper/temper | awk '{print $3}'");
+	$temp = command("sudo /home/tao/temper/temper | awk '{print $3}'")[0];
 
 	return $temp;
 }
