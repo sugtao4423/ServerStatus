@@ -1,5 +1,5 @@
 <?php
-require_once './config.php';
+require_once('./config.php');
 $user = getUser();
 $password = getPassword();
 if(!isset($_SERVER['PHP_AUTH_USER'])){
