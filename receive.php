@@ -29,6 +29,7 @@ switch($name){
 		break;
 
 	case micro:
+	case raspi:
 		memory();
 		process();
 		break;

@@ -16,6 +16,7 @@ switch($name){
 		break;
 
 	case micro:
+	case raspi:
 		$jsonArr = array(
 				"name" => $name,
 				"memory" => memory(),
