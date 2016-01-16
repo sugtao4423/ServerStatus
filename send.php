@@ -2,7 +2,7 @@
 require_once './config.php';
 $user = getUser();
 $password = getPassword();
-$url = "https://${user}:${password}@sugtao4423.xyz/ServerStatus/update.php";
+$url = "https://${user}:${password}@sugtao4423.xyz/ServerStatus/receive.php";
 $name = $argv[1];
 
 switch($name){
