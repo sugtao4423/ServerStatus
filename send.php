@@ -28,6 +28,7 @@ switch($name){
 				"name" => $name,
 				"temp" => serverRoomTemp()
 		);
+		break;
 
 	default:
 		die();
