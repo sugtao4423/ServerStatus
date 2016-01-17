@@ -1,5 +1,5 @@
 <?php
-require_once('./config.php');
+require_once(dirname(__FILE__) . '/config.php');
 $user = getUser();
 $password = getPassword();
 $url = "https://${user}:${password}@sugtao4423.xyz/ServerStatus/receive.php";
