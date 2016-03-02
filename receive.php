@@ -23,6 +23,7 @@ $location = "database/" . $name . "/";
 
 switch($name){
 	case xeon:
+	case git:
 		sensors();
 		memory();
 		process();

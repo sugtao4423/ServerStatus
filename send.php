@@ -9,7 +9,16 @@ switch($name){
 	case xeon:
 		$jsonArr = array(
 				"name" => $name,
-				"sensors" => sensors(),
+				"sensors" => sensors(3, 6),
+				"memory" => memory(),
+				"process" => process()
+		);
+		break;
+
+	case git:
+		$jsonArr = array(
+				"name" => $name,
+				"sensors" => sensors(8, 11),
 				"memory" => memory(),
 				"process" => process()
 		);
@@ -43,8 +52,8 @@ $options = array('http' => array(
 ));
 file_get_contents($url, false, stream_context_create($options));
 
-function sensors(){
-	$sensors = command("sensors | awk 'NR==3,NR==6 {print $3}'");
+function sensors($start, $end){
+	$sensors = command("sensors | awk 'NR==${start},NR==${end} {print $3}'");
 	$core0 = preg_replace("/\.0|\+|°C/", "", $sensors[0]);
 	$core1 = preg_replace("/\.0|\+|°C/", "", $sensors[1]);
 	$core2 = preg_replace("/\.0|\+|°C/", "", $sensors[2]);
