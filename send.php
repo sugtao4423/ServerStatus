@@ -34,9 +34,12 @@ switch($name){
 		break;
 
 	case serverRoom:
+		$temp = serverRoomTemp();
+		if($temp === "")
+			die();
 		$jsonArr = array(
 				"name" => $name,
-				"temp" => serverRoomTemp()
+				"temp" => $temp
 		);
 		break;
 
