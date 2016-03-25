@@ -35,7 +35,7 @@ switch($name){
 
 	case serverRoom:
 		$temp = serverRoomTemp();
-		if($temp === "")
+		if(empty($temp))
 			die();
 		$jsonArr = array(
 				"name" => $name,
