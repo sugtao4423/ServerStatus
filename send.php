@@ -43,6 +43,16 @@ switch($name){
 		);
 		break;
 
+	case fanLog:
+		$temp = fanLog();
+		$jsonArr = array(
+				"name" => $name,
+				"date" => $temp[0],
+				"time" => $temp[1],
+				"temp" => $temp[2]
+		);
+		break;
+
 	default:
 		die();
 }
@@ -95,6 +105,13 @@ function process(){
 
 function serverRoomTemp(){
 	$temp = command("sudo /home/tao/temper/temper | awk '{print $3}'")[0];
+
+	return $temp;
+}
+
+function  fanLog(){
+	$temper = command("sudo /home/tao/temper/temper")[0];
+	$temp = preg_split("/\s/", $temper);
 
 	return $temp;
 }
