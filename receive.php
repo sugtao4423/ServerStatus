@@ -91,11 +91,12 @@ function serverRoomTemp(){
 
 function fanLog(){
 	global $location, $json;
+	$status = $json["status"];
 	$date = $json["date"];
 	$time = $json["time"];
 	$temp = $json["temp"];
 
 	$db = new SQLite3($location . "fanLog.db");
-	$db->exec("create table if not exists fanLog(date, time, temp)");
-	$db->exec("insert into fanLog values('${date}', '${time}', '${temp}')");
+	$db->exec("create table if not exists fanLog(status, date, time, temp)");
+	$db->exec("insert into fanLog values('${status}', ${date}', '${time}', '${temp}')");
 }
