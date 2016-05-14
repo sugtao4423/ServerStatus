@@ -98,5 +98,5 @@ function fanLog(){
 
 	$db = new SQLite3($location . "fanLog.db");
 	$db->exec("create table if not exists fanLog(status, date, time, temp)");
-	$db->exec("insert into fanLog values('${status}', ${date}', '${time}', '${temp}')");
+	$db->exec("insert into fanLog values('${status}', '${date}', '${time}', '${temp}')");
 }

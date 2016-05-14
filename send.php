@@ -110,7 +110,7 @@ function serverRoomTemp(){
 	return $temp;
 }
 
-function  fanLog(){
+function fanLog(){
 	$temper = command("sudo /home/tao/temper/temper")[0];
 	$temp = preg_split("/\s/", $temper);
 
