@@ -38,6 +38,10 @@ switch($name){
 	case serverRoom:
 		serverRoomTemp();
 		break;
+
+	case fanLog:
+		fanLog();
+		break;
 }
 
 function sensors(){
