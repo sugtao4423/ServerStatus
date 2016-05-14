@@ -47,10 +47,10 @@ switch($name){
 		$temp = fanLog();
 		$jsonArr = array(
 				"name" => $name,
-				"status" => $temp[0],
-				"date" => $temp[1][0],
-				"time" => $temp[1][1],
-				"temp" => $temp[1][2]
+				"status" => $argv[2],
+				"date" => $temp[0],
+				"time" => $temp[1],
+				"temp" => $temp[2]
 		);
 		break;
 
@@ -111,11 +111,10 @@ function serverRoomTemp(){
 }
 
 function  fanLog(){
-	$status = $argv[2];
 	$temper = command("sudo /home/tao/temper/temper")[0];
 	$temp = preg_split("/\s/", $temper);
 
-	return array($status, $temp);
+	return $temp;
 }
 
 function command($command){
