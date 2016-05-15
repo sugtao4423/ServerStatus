@@ -19,7 +19,7 @@ $json = json_decode($_POST[0], true);
 $name = $json['name'];
 
 $date = date('Y-m-d H:i');
-$location = "database/" . $name . "/";
+$location = dirname(__FILE__) . "/database/" . $name . "/";
 
 switch($name){
 	case xeon:
@@ -87,6 +87,7 @@ function serverRoomTemp(){
 	$db = new SQLite3($location . "temp.db");
 	$db->exec("create table if not exists temp(date, temp)");
 	$db->exec("insert into temp values('${date}', '${temp}')");
+	$db->close();
 }
 
 function fanLog(){
@@ -99,4 +100,5 @@ function fanLog(){
 	$db = new SQLite3($location . "fanLog.db");
 	$db->exec("create table if not exists fanLog(status, date, time, temp)");
 	$db->exec("insert into fanLog values('${status}', '${date}', '${time}', '${temp}')");
+	$db->close();
 }
