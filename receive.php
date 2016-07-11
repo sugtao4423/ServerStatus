@@ -36,11 +36,7 @@ switch($name){
 		break;
 
 	case serverRoom:
-		serverRoomTemp();
-		break;
-
-	case fanLog:
-		fanLog();
+		serverRoom();
 		break;
 }
 $db->close();
@@ -75,10 +71,16 @@ function process(){
 	$db->exec("insert into process values('${date}', ${process}, ${zombie})");
 }
 
-function serverRoomTemp(){
+function serverRoom(){
 	global $db, $date, $location, $json;
 	$temp = $json["temp"];
+	$hum = $json["hum"];
+	$pres = $json["pres"];
 
 	$db->exec("create table if not exists temp(date, temp)");
+	$db->exec("create table if not exists hum(date, hum)");
+	$db->exec("create table if not exists pres(date, pres)");
 	$db->exec("insert into temp values('${date}', '${temp}')");
+	$db->exec("insert into hum values('${date}', '${hum}')");
+	$db->exec("insert into pres values('${date}', '${pres}')");
 }

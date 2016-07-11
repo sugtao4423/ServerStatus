@@ -34,23 +34,12 @@ switch($name){
 		break;
 
 	case serverRoom:
-		$temp = serverRoomTemp();
-		if(empty($temp))
-			die();
+		$result = serverRoom();
 		$jsonArr = array(
 				"name" => $name,
-				"temp" => $temp
-		);
-		break;
-
-	case fanLog:
-		$temp = fanLog();
-		$jsonArr = array(
-				"name" => $name,
-				"status" => $argv[2],
-				"date" => $temp[0],
-				"time" => $temp[1],
-				"temp" => $temp[2]
+				"temp" => $result[0],
+				"hum" => $result[1],
+				"pres" => $result[2]
 		);
 		break;
 
@@ -104,17 +93,10 @@ function process(){
 	);
 }
 
-function serverRoomTemp(){
-	$temp = command("sudo /home/tao/temper/temper | awk '{print $3}'")[0];
+function serverRoom(){
+	$cmd = command("sudo python /home/tao/bme280_tao.py")[0];
 
-	return $temp;
-}
-
-function fanLog(){
-	$temper = command("sudo /home/tao/temper/temper")[0];
-	$temp = preg_split("/\s/", $temper);
-
-	return $temp;
+	return split(",", $cmd);
 }
 
 function command($command){
