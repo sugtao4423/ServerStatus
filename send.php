@@ -10,7 +10,7 @@ switch($name){
 		$jsonArr = array(
 				"name" => $name,
 				"sensors" => sensors(3, 6),
-				"memory" => memory(),
+				"memory" => memory(3, 4),
 				"process" => process()
 		);
 		break;
@@ -19,7 +19,7 @@ switch($name){
 		$jsonArr = array(
 				"name" => $name,
 				"sensors" => sensors(3, 6),
-				"memory" => memory(),
+				"memory" => memory(2, 3),
 				"process" => process()
 		);
 		break;
@@ -28,7 +28,7 @@ switch($name){
 	case raspi:
 		$jsonArr = array(
 				"name" => $name,
-				"memory" => memory(),
+				"memory" => memory(3, 4),
 				"process" => process()
 		);
 		break;
@@ -70,8 +70,8 @@ function sensors($start, $end){
 	);
 }
 
-function memory(){
-	$memory = command("free -m | awk 'NR==3 {print $3} NR==3 {print $4} NR==4 {print $3}'");
+function memory($memNR, $swapNR){
+	$memory = command("free -m | awk 'NR==${memNR} {print $3} NR==${memNR} {print $4} NR==${swapNR} {print $3}'");
 	$used = $memory[0];
 	$free = $memory[1];
 	$swap = $memory[2];
