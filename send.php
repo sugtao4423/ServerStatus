@@ -18,7 +18,7 @@ switch($name){
 	case git:
 		$jsonArr = array(
 				"name" => $name,
-				"sensors" => sensors(8, 11),
+				"sensors" => sensors(3, 6),
 				"memory" => memory(),
 				"process" => process()
 		);
