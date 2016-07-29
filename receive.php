@@ -38,11 +38,15 @@ switch($name){
 	case serverRoom:
 		serverRoom();
 		break;
+
+	case serverRoomPower:
+		serverRoomPower();
+		break;
 }
 $db->close();
 
 function sensors(){
-	global $db, $date, $location, $json;
+	global $db, $date, $json;
 	$core0 = $json["sensors"]["core0"];
 	$core1 = $json["sensors"]["core1"];
 	$core2 = $json["sensors"]["core2"];
@@ -53,7 +57,7 @@ function sensors(){
 }
 
 function memory(){
-	global $db, $date, $location, $json;
+	global $db, $date, $json;
 	$used = $json["memory"]["used"];
 	$free = $json["memory"]["free"];
 	$swap = $json["memory"]["swap"];
@@ -63,7 +67,7 @@ function memory(){
 }
 
 function process(){
-	global $db, $date, $location, $json;
+	global $db, $date, $json;
 	$process = $json["process"]["process"];
 	$zombie = $json["process"]["zombie"];
 
@@ -72,7 +76,7 @@ function process(){
 }
 
 function serverRoom(){
-	global $db, $date, $location, $json;
+	global $db, $date, $json;
 	$temp = $json["temp"];
 	$hum = $json["hum"];
 	$pres = $json["pres"];
@@ -83,4 +87,18 @@ function serverRoom(){
 	$db->exec("insert into temp values('${date}', '${temp}')");
 	$db->exec("insert into hum values('${date}', '${hum}')");
 	$db->exec("insert into pres values('${date}', '${pres}')");
+}
+
+function serverRoomPower(){
+	global $db, $json;
+
+	$db->exec("create table if not exists power(date, watt, kWh)");
+
+	foreach($json["status"] as $statusArr){
+		$dateTime = $statusArr["date"];
+		$watt = $statusArr["watt"];
+		$kWh = $statusArr["kWh"];
+
+		$db->exec("insert into power values('${dateTime}', '${watt}', '${kWh}')");
+	}
 }

@@ -43,6 +43,13 @@ switch($name){
 		);
 		break;
 
+	case serverRoomPower:
+		$jsonArr = array(
+				"name" => $name,
+				"status" => serverRoomPower()
+		);
+		break;
+
 	default:
 		die();
 }
@@ -97,6 +104,31 @@ function serverRoom(){
 	$cmd = command("sudo python /home/tao/bme280_tao.py")[0];
 
 	return split(",", $cmd);
+}
+
+function serverRoomPower(){
+	do{
+		sleep(3);
+		exec("sudo python /home/tao/taptst10ctl/taptst10ctl.py", $out, $cmdResult);
+	}while($cmdResult != 0);
+
+	$result = array();
+
+	foreach($out as $line){
+		$arr = split(",", $line);
+		$dateTime = $arr[1];
+		$watt = $arr[2];
+		$kWh = $arr[3];
+
+		if(date('Y-m-d') === split(" ", $dateTime)[0])
+			continue;
+		array_push($result, array(
+				"date" => $dateTime,
+				"watt" => $watt,
+				"kWh" => $kWh
+		));
+	}
+	return $result;
 }
 
 function command($command){
