@@ -92,13 +92,36 @@ function serverRoom(){
 function serverRoomPower(){
 	global $db, $json;
 
-	$db->exec("create table if not exists power(date, watt, kWh)");
+	$db->exec("create table if not exists power(date TEXT, watt REAL, kWh REAL)");
+	$db->exec("create table if not exists powerOfDay(date TEXT, wattAvg REAL, kWh REAL)");
 
 	foreach($json["status"] as $statusArr){
 		$dateTime = $statusArr["date"];
 		$watt = $statusArr["watt"];
 		$kWh = $statusArr["kWh"];
 
-		$db->exec("insert into power values('${dateTime}', '${watt}', '${kWh}')");
+		$db->exec("insert into power values('${dateTime}', ${watt}, ${kWh})");
+	}
+
+	$powerExistsDay = array();
+	$powerPerDayExistsDay = array();
+
+	$query = $db->query("select distinct substr(date, 1, 10) from power");
+	while($rows = $query->fetchArray())
+		array_push($powerExistsDay, $rows[0]);
+
+	$query = $db->query("select date from powerOfDay");
+	while($rows = $query->fetchArray())
+		array_push($powerPerDayExistsDay, $rows[0]);
+
+	for($i = 0; $i < count($powerExistsDay); $i++){
+		$day = $powerExistsDay[$i];
+		if(!in_array($day, $powerPerDayExistsDay)){
+			$avg_watt = $db->querySingle("select round(avg(watt), 2) from power where date like '${day}%'");
+			$day_kWh = $db->querySingle("select kWh-(select kWh from power where date like '${day}%' limit 1) 
+					from power where date like '${day}%' limit 
+					(select count(*) from power where date like '${day}%')-1, 1");
+			$db->exec("insert into powerOfDay values('${day}', ${avg_watt}, ${day_kWh})");
+		}
 	}
 }
