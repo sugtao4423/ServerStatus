@@ -22,19 +22,6 @@ $date = date('Y-m-d H:i');
 $db = new SQLite3(dirname(__FILE__) . "/database/" . $name . ".db");
 
 switch($name){
-	case xeon:
-	case git:
-		sensors();
-		memory();
-		process();
-		break;
-
-	case micro:
-	case raspi:
-		memory();
-		process();
-		break;
-
 	case serverRoom:
 		serverRoom();
 		break;
@@ -42,19 +29,15 @@ switch($name){
 	case serverRoomPower:
 		serverRoomPower();
 		break;
+
+	default:
+		if(array_key_exists('memory', $json))
+			memory();
+		if(array_key_exists('process', $json))
+			process();
+		break;
 }
 $db->close();
-
-function sensors(){
-	global $db, $date, $json;
-	$core0 = $json["sensors"]["core0"];
-	$core1 = $json["sensors"]["core1"];
-	$core2 = $json["sensors"]["core2"];
-	$core3 = $json["sensors"]["core3"];
-
-	$db->exec("create table if not exists sensors(date, core0, core1, core2, core3)");
-	$db->exec("insert into sensors values('${date}', ${core0}, ${core1}, ${core2}, ${core3})");
-}
 
 function memory(){
 	global $db, $date, $json;
