@@ -20,7 +20,8 @@ $name = $options['name'];
 $jsonArr['name'] = $name;
 switch($name){
 	case serverRoom:
-		$result = serverRoom();
+	case myRoom:
+		$result = room();
 		$jsonArr['temp'] = $result[0];
 		$jsonArr['hum'] = $result[1];
 		$jsonArr['pres'] = $result[2];
@@ -72,7 +73,7 @@ function process(){
 	);
 }
 
-function serverRoom(){
+function room(){
 	$cmd = command("sudo python /home/tao/bme280_tao.py")[0];
 
 	return split(",", $cmd);

@@ -23,7 +23,8 @@ $db = new SQLite3(dirname(__FILE__) . "/database/" . $name . ".db");
 
 switch($name){
 	case serverRoom:
-		serverRoom();
+	case myRoom:
+		room();
 		break;
 
 	case serverRoomPower:
@@ -58,7 +59,7 @@ function process(){
 	$db->exec("insert into process values('${date}', ${process}, ${zombie})");
 }
 
-function serverRoom(){
+function room(){
 	global $db, $date, $json;
 	$temp = $json["temp"];
 	$hum = $json["hum"];
