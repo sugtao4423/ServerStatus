@@ -18,6 +18,7 @@ $json = json_decode($_POST[0], true);
 
 $name = $json['name'];
 
+date_default_timezone_set('Asia/Tokyo');
 $date = date('Y-m-d H:i');
 $db = new SQLite3(dirname(__FILE__) . "/database/" . $name . ".db");
 
