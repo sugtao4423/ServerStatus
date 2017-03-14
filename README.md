@@ -7,16 +7,16 @@ send.phpに引数としてサーバー名と送信するデータの種類を渡
 update.phpでは受け取ったデータをSQLite3に格納する。
 
 ## free -mをしてみて
-|| total | used | free | shared | buffers | cached
+| | total | used | free | shared | buffers | cached
 --- | --- | --- | --- | --- | --- | ---
 Mem: | 12016 | 3321 | 8695 | 349 | 104 | 1206
--/+ buffers/cache: || 2010 | 10006 |||
-Swap: | 7 | 0 | 7 |||
+-/+ buffers/cache: | | 2010 | 10006
+Swap: | 7 | 0 | 7
 
-|| total | used | free | shared | buff/cache | available
+| | total | used | free | shared | buff/cache | available
 --- | --- | --- | --- | --- | --- | ---
 Mem: | 3934 | 606 | 2220 | 30 | 1106 | 3237
-Swap: | 4093 | 0 | 4093 |||
+Swap: | 4093 | 0 | 4093
 
 このどちらかがでてくるはず。
 
