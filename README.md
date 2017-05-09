@@ -1,36 +1,59 @@
-# なにこれ
-[ふらんのcsd](https://github.com/flum1025/csd)みたいなもの。（全然違うとか怒られそう）
+# ServerStatus
 
-send.phpを使ってupdate.phpにデータを送信してやり、update.phpでSQLite3DataBaseに格納って感じ。
+自作のServerStatusは廃止  
+Zabbixでの運用に切り替えた
 
-send.phpに引数としてサーバー名と送信するデータの種類を渡す。  
-update.phpでは受け取ったデータをSQLite3に格納する。
+Zabbixのグラフを外部のページに貼り付けられるようにしたもの
 
-## free -mをしてみて
-|| total | used | free | shared | buffers | cached
---- | --- | --- | --- | --- | --- | ---
-Mem: | 12016 | 3321 | 8695 | 349 | 104 | 1206
--/+ buffers/cache: || 2010 | 10006 |||
-Swap: | 7 | 0 | 7 |||
+## refreshServers.php
+`refreshServers.php`を実行すると同じディレクトリに`servers.php`が作成され、ZabbixのAPIを使用するユーザーが取得できるすべての`ホスト名` `ホストID` `グラフ名` `グラフID` `グラフタイプ`が保存される
 
-|| total | used | free | shared | buff/cache | available
---- | --- | --- | --- | --- | --- | ---
-Mem: | 3934 | 606 | 2220 | 30 | 1106 | 3237
-Swap: | 4093 | 0 | 4093 |||
+Sample
+```
+class Servers {
+public static $servers =
+array(
+    0 =>
+    array (
+        'host' => array (
+            'hostid' => '10198',
+            'name' => 'myroom-raspi',
+        ),
+        'graphs' => array (
+            0 =>
+            array (
+                'graphid' => '810',
+                'graphtype' => '0',
+                'name' => 'CPU jumps',
+            ),
+            1 =>
+            array (
+                'graphid' => '811',
+                'graphtype' => '0',
+                'name' => 'CPU load',
+            ),
+            2 =>
+            array (
+                'graphid' => '812',
+                'graphtype' => '1',
+                'name' => 'CPU utilization',
+            ), .....
+        )
+    )
+);
+}
+```
+これをどうにかすればいろいろ取得できるでしょ
 
-このどちらかがでてくるはず。
+## config.php
+Sample
+```
+<?php
+class Config {
+    public static $URL = 'http://localhost.localdomain';
+    public static $AUTH = 'ZABBIX_AUTH';
+    public static $SESSION_ID = 'ZABBIX_SESSIONID';
+}
 
-もし下のような`-/+ buffers/cache:`行がない結果なら  
-`--no-memory-buffers-line`オプションをつける
-## Sample
-* サーバー名: xeon
-* 送信するデータ: メモリ、プロセス
-* ただし上記の表の**上**の結果
-
-`php send.php --name xeon --memory --process`
-
-* サーバー名: git
-* 送信するデータ: メモリ、プロセス
-* ただし上記の表の**下**の結果
-
-`php send.php --name git --memory --process --no-memory-buffers-line`
+```
+どこかにユーザー認証する処理を書けば良かったかも
