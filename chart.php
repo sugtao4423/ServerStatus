@@ -19,7 +19,7 @@ case 1:
     break;
 
 case 2:
-    $requestUrl = Config::$URL . "/chart6.php?graphid=${graphid}&period=172800";
+    $requestUrl = Config::$URL . "/chart6.php?graphid=${graphid}&period=3600";
     break;
 }
 
