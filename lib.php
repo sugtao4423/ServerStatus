@@ -24,7 +24,7 @@ function getGraphBtns(){
         }
     }
     for($i = 0; $i < count($graphs); $i++){
-        echo "<a href=\"javascript:void(0)\" class=\"button graphbtn\" data-params=\"&host={$hostname}&gid={$graphs[$i]['graphid']}&gname={$graphs[$i]['name']}&gtype={$graphs[$i]['graphtype']}\">{$graphs[$i]['name']}</a> ";
+        echo "<a href=\"javascript:void(0)\" class=\"button graphbtn\" data-host=\"{$hostname}\" data-graphid=\"{$graphs[$i]['graphid']}\" data-graphname=\"{$graphs[$i]['name']}\" data-graphtype=\"{$graphs[$i]['graphtype']}\">{$graphs[$i]['name']}</a> ";
     }
 }
 
