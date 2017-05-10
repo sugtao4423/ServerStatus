@@ -29,5 +29,5 @@ function getGraphBtns(){
 }
 
 function getGraph(){
-    echo "<center><img src=\"chart.php?graphid={$_GET['gid']}&gtype={$_GET['gtype']}\"></center>";
+    echo "<img src=\"chart.php?graphid={$_GET['gid']}&gtype={$_GET['gtype']}\">";
 }
