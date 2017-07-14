@@ -29,5 +29,8 @@ function getGraphBtns(){
 }
 
 function getGraph(){
-    echo "<img src=\"chart.php?graphid={$_GET['gid']}&gtype={$_GET['gtype']}\">";
+    if(isset($_GET['addTime']))
+        echo "<img src=\"chart.php?graphid={$_GET['gid']}&gtype={$_GET['gtype']}&time={$_SERVER['REQUEST_TIME']}\">";
+    else
+        echo "<img src=\"chart.php?graphid={$_GET['gid']}&gtype={$_GET['gtype']}\">";
 }
