@@ -68,8 +68,17 @@ function getGraphList($hostId, $isSort){
     $result = url_get_contents($data);
     $json = json_decode($result, true);
     $gList = array();
+    $count = 0;
     for($i = 0; $i < count($json["result"]); $i++){
-        $gList[$i] = $json["result"][$i];
+        if(preg_match('/^Network traffic on.*/', $json["result"][$i]["name"]) === 1){
+            if(preg_match('/^Network traffic on eth.*/', $json["result"][$i]["name"]) === 1){
+                $gList[$count] = $json["result"][$i];
+                $count++;
+            }
+        }else{
+            $gList[$count] = $json["result"][$i];
+            $count++;
+        }
     }
     if($isSort)
         return sortAsValue($gList, "name");
