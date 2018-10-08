@@ -15,11 +15,11 @@ else
 switch($gtype){
 case 0:
 case 1:
-    $requestUrl = Config::$URL . "/chart2.php?graphid=${graphid}&period=172800";
+    $requestUrl = Config::$URL . "/chart2.php?graphid=${graphid}&profileIdx=web.graphs.filter&from=now-2d&to=now";
     break;
 
 case 2:
-    $requestUrl = Config::$URL . "/chart6.php?graphid=${graphid}&period=3600";
+    $requestUrl = Config::$URL . "/chart6.php?graphid=${graphid}&profileIdx=web.graphs.filter&from=now-1h&to=now";
     break;
 }
 
