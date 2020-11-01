@@ -51,7 +51,7 @@ function changeGraphButtons(){
                 'data-graphid': graph.graphid
             });
             if(selectedServer === defaultHost && graph.name === defaultGraph){
-                buttonElement.addClass('special');
+                buttonElement.addClass('primary');
                 clickGraphButton(buttonElement);
             }
             $('#graphbuttons').append(buttonElement);
@@ -62,8 +62,8 @@ function changeGraphButtons(){
 let currentGraphType = undefined;
 let currentGraphId = undefined;
 function clickGraphButton(button){
-    $('#graphbuttons .special').removeClass('special');
-    $(button).addClass('special');
+    $('#graphbuttons .primary').removeClass('primary');
+    $(button).addClass('primary');
     currentGraphType = $(button).attr('data-graphtype');
     currentGraphId = $(button).attr('data-graphid');
     loadGraphImage();
