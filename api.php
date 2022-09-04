@@ -19,6 +19,7 @@ switch ($_GET['type']) {
         break;
     case 'chart':
         $response = getChart($ZBX_URL, $_GET['graphtype'], $_GET['graphid']);
+        header('Content-type: image/png');
         break;
 }
 echo $response;
@@ -68,7 +69,6 @@ function getChart(string $zabbixUrl, string $graphType, string $graphId): string
     $response = curl_exec($ch);
     curl_close($ch);
 
-    header('Content-type: image/png');
     return $response;
 }
 
