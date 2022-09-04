@@ -194,14 +194,13 @@ class RefreshServers
             'sortfield' => 'name'
         ];
         $json = $this->sendZabbixApi($method, $params, $auth);
+        $graphs = array_filter($json['result'], function ($graph) {
+            return preg_match('/^Network traffic on.*/', $graph['name']) !== 1 ||
+                preg_match('/^Network traffic on (eth|ens).*/', $graph['name']) !== 0;
+        });
+
         $result = [];
-        foreach ($json['result'] as $graph) {
-            if (
-                preg_match('/^Network traffic on.*/', $graph['name']) === 1 &&
-                preg_match('/^Network traffic on (eth|ens).*/', $graph['name']) === 0
-            ) {
-                continue;
-            }
+        foreach ($graphs as $graph) {
             $result[] = [
                 'graphid' => (int)$graph['graphid'],
                 'graphtype' => (int)$graph['graphtype'],
