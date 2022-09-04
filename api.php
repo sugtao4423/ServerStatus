@@ -50,23 +50,26 @@ function getChart(string $zabbixUrl, string $graphType, string $graphId): string
         return 'Does not supported graphtype';
     }
 
-    if ($graphType == 2) {
-        $chartPath = 'chart6.php';
-    } else {
-        $chartPath = 'chart2.php';
-    }
-    $chartUrl = "${zabbixUrl}/${chartPath}?graphid=${graphId}&profileIdx=web.graphs.filter&from=now-2d&to=now";
+    $chartPath = $graphType === 2 ? 'chart6.php' : 'chart2.php';
+    $baseUrl = $zabbixUrl . '/' . $chartPath;
+    $params = [
+        'graphid' => $graphId,
+        'profileIdx' => 'web.graphs.filter',
+        'from' => 'now-2d',
+        'to' => 'now',
+    ];
+    $url = $baseUrl . '?' . http_build_query($params);
 
     $session = getZbxConfig()['session'];
 
-    $context = stream_context_create([
-        'http' => [
-            'method' => 'GET',
-            'header' => "Cookie: zbx_session=${session}"
-        ]
-    ]);
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_COOKIE, 'zbx_session=' . $session);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
     header('Content-type: image/png');
-    return file_get_contents($chartUrl, false, $context);
+    return $response;
 }
 
 class RefreshServers
