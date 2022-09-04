@@ -8,30 +8,35 @@ $ZBX_USER   = 'ZABBIX_USER';
 $ZBX_PASSWD = 'ZABBIX_PASSWORD';
 /******************/
 
-$jsonPath = __DIR__ . '/zabbix.json';
+define('ZBX_JSON_PATH', __DIR__ . '/zabbix.json');
 
 switch ($_GET['type']) {
     default:
-        $response = getServers($jsonPath);
+        $response = getServers();
         break;
     case 'refreshServers':
-        $response = (new RefreshServers($ZBX_URL, $ZBX_USER, $ZBX_PASSWD, $jsonPath))->refresh();
+        $response = (new RefreshServers($ZBX_URL, $ZBX_USER, $ZBX_PASSWD))->refresh();
         break;
     case 'chart':
-        $response = getChart($ZBX_URL, $jsonPath, $_GET['graphtype'], $_GET['graphid']);
+        $response = getChart($ZBX_URL, $_GET['graphtype'], $_GET['graphid']);
         break;
 }
 echo $response;
 
 
-function getServers(string $jsonPath): string
+function getZbxConfig(): array
 {
-    $json = file_get_contents($jsonPath);
-    $json = json_decode($json, true);
-    return json_encode($json['hosts'], JSON_UNESCAPED_UNICODE);
+    $json = file_get_contents(ZBX_JSON_PATH);
+    return json_decode($json, true);
 }
 
-function getChart(string $zabbixUrl, string $jsonPath, string $graphType, string $graphId): string
+function getServers(): string
+{
+    $config = getZbxConfig();
+    return json_encode($config['hosts'], JSON_UNESCAPED_UNICODE);
+}
+
+function getChart(string $zabbixUrl, string $graphType, string $graphId): string
 {
     if (!is_numeric($graphType) || !is_numeric($graphId)) {
         http_response_code(400);
@@ -52,9 +57,7 @@ function getChart(string $zabbixUrl, string $jsonPath, string $graphType, string
     }
     $chartUrl = "${zabbixUrl}/${chartPath}?graphid=${graphId}&profileIdx=web.graphs.filter&from=now-2d&to=now";
 
-    $json = file_get_contents($jsonPath);
-    $json = json_decode($json, true);
-    $session = $json['session'];
+    $session = getZbxConfig()['session'];
 
     $context = stream_context_create([
         'http' => [
@@ -71,14 +74,12 @@ class RefreshServers
     private $zabbixUrl;
     private $zabbixUser;
     private $zabbixPass;
-    private $jsonPath;
 
-    function __construct($zabbixUrl, string $zabbixUser, string $zabbixPass, string $jsonPath)
+    function __construct($zabbixUrl, string $zabbixUser, string $zabbixPass)
     {
         $this->zabbixUrl = $zabbixUrl;
         $this->zabbixUser = $zabbixUser;
         $this->zabbixPass = $zabbixPass;
-        $this->jsonPath = $jsonPath;
     }
 
     function refresh(): string
@@ -96,7 +97,7 @@ class RefreshServers
             'hosts' => $hosts
         ];
         $json = json_encode($json, JSON_UNESCAPED_UNICODE);
-        $size = file_put_contents($this->jsonPath, $json, LOCK_EX);
+        $size = file_put_contents(ZBX_JSON_PATH, $json, LOCK_EX);
         return "finish.<br>${size} bytes.";
     }
 
