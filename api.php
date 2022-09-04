@@ -106,35 +106,47 @@ class RefreshServers
 
     private function getSession(): string
     {
-        $loginUrl = "{$this->zabbixUrl}/index.php";
-        $loginUrl .= "?name={$this->zabbixUser}&password={$this->zabbixPass}&enter=Sign%20in";
-        file_get_contents($loginUrl);
-        foreach ($http_response_header as $header) {
-            if (preg_match('/^Set-Cookie:.+?zbx_session=(.+?);/', $header, $m) === 1) {
-                return $m[1];
-            }
-        }
+        $baseUrl = $this->zabbixUrl . '/index.php';
+        $params = [
+            'name' => $this->zabbixUser,
+            'password' => $this->zabbixPass,
+            'enter' => 'Sign in',
+        ];
+        $url = $baseUrl . '?' . http_build_query($params);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        $headers = curl_exec($ch);
+        curl_close($ch);
+
+        preg_match('/Set-Cookie:.+?zbx_session=(.+?);/i', $headers, $m);
+        return $m[1];
     }
 
     private function sendZabbixApi(string $method, array $params, ?string $auth): array
     {
-        $context = stream_context_create([
-            'http' => [
-                'method' => 'GET',
-                'header' => 'Content-Type: application/json-rpc',
-                'content' => json_encode(
-                    [
-                        'jsonrpc' => '2.0',
-                        'method' => $method,
-                        'params' => $params,
-                        'auth' => $auth,
-                        'id' => 114514
-                    ]
-                )
-            ]
-        ]);
-        $json = file_get_contents("{$this->zabbixUrl}/api_jsonrpc.php", false, $context);
-        return json_decode($json, true);
+        $url = $this->zabbixUrl . '/api_jsonrpc.php';
+        $headers = [
+            'Content-Type: application/json-rpc',
+        ];
+        $data = [
+            'jsonrpc' => '2.0',
+            'method' => $method,
+            'params' => $params,
+            'auth' => $auth,
+            'id' => 114514
+        ];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($response, true);
     }
 
     private function getZabbixAuth(): string
