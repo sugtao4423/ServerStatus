@@ -101,7 +101,7 @@ class RefreshServers
         ];
         $json = json_encode($json, JSON_UNESCAPED_UNICODE);
         $size = file_put_contents(ZBX_JSON_PATH, $json, LOCK_EX);
-        return "finish.<br>${size} bytes.";
+        return "finish.<br>{$size} bytes.";
     }
 
     private function getSession(): string
