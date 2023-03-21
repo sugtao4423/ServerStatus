@@ -153,7 +153,7 @@ class RefreshServers
     {
         $method = 'user.login';
         $params = [
-            'user' => $this->zabbixUser,
+            'username' => $this->zabbixUser,
             'password' => $this->zabbixPass
         ];
         $json = $this->sendZabbixApi($method, $params, null);
